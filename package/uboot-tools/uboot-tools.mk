@@ -4,11 +4,24 @@
 #
 ################################################################################
 
+ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_USE_UBOOT_VERSION),y)
+# We have to use the BR2_TARGET_UBOOT_VERSION because of the order of inclusion
+# of the mk files.
+UBOOT_TOOLS_VERSION = $(call qstrip,$(BR2_TARGET_UBOOT_VERSION))
+UBOOT_TOOLS_SOURCE = $(UBOOT_SOURCE)
+UBOOT_TOOLS_SITE = $(UBOOT_SITE)
+ifneq ($(UBOOT_SITE_METHOD),)
+UBOOT_TOOL_SITE_METHOD = $(UBOOT_SITE_METHOD)
+endif
+UBOOT_TOOLS_LICENSE = $(UBOOT_LICENSE)
+UBOOT_TOOLS_LICENSE_FILES = $(UBOOT_LICENSE_FILES)
+else
 UBOOT_TOOLS_VERSION = 2014.01
-UBOOT_TOOLS_SOURCE  = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
-UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
+UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
 UBOOT_TOOLS_LICENSE = GPLv2+
 UBOOT_TOOLS_LICENSE_FILES = Licenses/gpl-2.0.txt
+endif
 
 define UBOOT_TOOLS_BUILD_CMDS
 	$(MAKE) -C $(@D) 			\

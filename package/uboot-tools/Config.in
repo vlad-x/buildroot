@@ -7,6 +7,24 @@ config BR2_PACKAGE_UBOOT_TOOLS
 
 if BR2_PACKAGE_UBOOT_TOOLS
 
+if BR2_TARGET_UBOOT
+
+choice
+	prompt "version"
+	default BR2_PACKAGE_UBOOT_TOOLS_LATEST_VERSION
+	help
+	  Select the specific uboot-tools version you want to use
+
+config BR2_PACKAGE_UBOOT_TOOLS_LATEST_VERSION
+	bool "Use latest upstream version"
+
+config BR2_PACKAGE_UBOOT_TOOLS_USE_UBOOT_VERSION
+	bool "Use the same version as the uboot package"
+
+endchoice
+
+endif
+
 config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
 	bool "mkimage"
 	help
