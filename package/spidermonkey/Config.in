@@ -1,0 +1,6 @@
+config BR2_PACKAGE_SPIDERMONKEY
+	bool "spidermonkey"
+	help
+	  SpiderMonkey is the code name for the first-ever JavaScript engine.
+
+	  https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -x
+
+case "$*" in
+	*" -R "*|"-R "*)
+		eval mkdir -p "\"\${${#}}\""
+		eval ln -sf "\"\${$((${#}-1))}\"" "\"\${${#}}\""
+		;;
+	*)
+		install -D "$@"
+		;;
+esac

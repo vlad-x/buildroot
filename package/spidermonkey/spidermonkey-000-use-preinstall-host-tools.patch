@@ -1,0 +1,20 @@
+diff -durN spidermonkey-24.2.0.orig/js/src/Makefile.in spidermonkey-24.2.0/js/src/Makefile.in
+--- spidermonkey-24.2.0.orig/js/src/Makefile.in	2013-11-19 20:42:43.000000000 +0100
++++ spidermonkey-24.2.0/js/src/Makefile.in	2014-02-04 19:37:33.276932438 +0100
+@@ -603,14 +603,14 @@
+ # Use CURDIR to avoid finding a jsautokw.h in the source tree (from a
+ # previous build?) via VPATH when we're building in a separate tree.
+ $(CURDIR)/jsautokw.h: host_jskwgen$(HOST_BIN_SUFFIX)
+-	./host_jskwgen$(HOST_BIN_SUFFIX) $@
++	host_jskwgen$(HOST_BIN_SUFFIX) $@
+ 
+ host_jsoplengen.$(OBJ_SUFFIX): jsopcode.tbl
+ 
+ # Use CURDIR to avoid finding a jsautooplen.h in the source tree (from
+ # a previous build?) via VPATH when we're building in a separate tree.
+ $(CURDIR)/jsautooplen.h: host_jsoplengen$(HOST_BIN_SUFFIX)
+-	./host_jsoplengen$(HOST_BIN_SUFFIX) $@
++	host_jsoplengen$(HOST_BIN_SUFFIX) $@
+ 
+ # Force auto-header generation before compiling any source that may use them
+ $(patsubst %.cc,%.$(OBJ_SUFFIX),$(CPPSRCS:%.cpp=%.$(OBJ_SUFFIX))): $(CURDIR)/jsautokw.h $(CURDIR)/jsautooplen.h
