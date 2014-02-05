@@ -5,6 +5,7 @@ config BR2_PACKAGE_POLKIT
 	depends on BR2_USE_MMU # libglib2
 	select BR2_PACKAGE_LIBGLIB2
 	select BR2_PACKAGE_EXPAT
+  select BR2_PACKAGE_SPIDERMONKEY
 	help
 	  PolicyKit is a toolkit for defining and handling
 	  authorizations.  It is used for allowing unprivileged
