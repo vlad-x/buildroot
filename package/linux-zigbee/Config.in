@@ -1,0 +1,28 @@
+config BR2_PACKAGE_LINUX_ZIGBEE
+	bool "linux-zigbee"
+	depends on BR2_USE_MMU # fork()
+	select BR2_PACKAGE_LIBNL
+	help
+	  IEEE 802.15.4 userspace tools.
+
+	  Note: The name's project is somewhat of a misnomer, because of licensing
+	  issues this does *NOT* implement ZigBee, only IEEE 802.15.4 and 6LoWPAN.
+
+	  http://sourceforge.net/apps/trac/linux-zigbee/
+
+if BR2_PACKAGE_LINUX_ZIGBEE
+
+config BR2_PACKAGE_LINUX_ZIGBEE_TESTS
+	bool "Install tests programs"
+	help
+		Linux-ZigBee build tests programs, select this if you want to install
+		them.
+
+config BR2_PACKAGE_LINUX_ZIGBEE_OLD_KERNEL_COMPAT
+	bool "Enable compatibility with older kernels"
+
+config BR2_PACKAGE_LINUX_ZIGBEE_LEASEFILE
+	string "Specify path for persistent lease storage."
+	default "/var/run/izcoordinator.leases"
+
+endif
