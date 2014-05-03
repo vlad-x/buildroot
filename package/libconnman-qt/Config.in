@@ -1,0 +1,17 @@
+config BR2_PACKAGE_LIBCONNMAN_QT
+	bool "libconnman-qt"
+	depends on BR2_INSTALL_LIBSTDCPP
+	# Qt5 is a big library, we don't want to select it
+	# automatically without the user knowing
+	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
+	depends on BR2_TOOLCHAIN_HAS_THREADS
+	help
+	  Qt bindings for ConnMan
+
+	  https://github.com/nemomobile/libconnman-qt
+
+comment "libconnman-qt needs a toolchain w/ C++, threads"
+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+
+comment"libconnman-qt need Qt"
+	depends on !(BR2_PACKAGE_QT || BR2_PACKAGE_QT5)
