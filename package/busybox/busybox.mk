@@ -21,6 +21,10 @@ BUSYBOX_CFLAGS = \
 BUSYBOX_LDFLAGS = \
 	$(TARGET_LDFLAGS)
 
+# initscripts contains/install only inittab and the init.d folder with base
+# scripts.
+BUSYBOX_DEPENDENCIES = initscripts
+
 # Link against libtirpc if available so that we can leverage its RPC
 # support for NFS mounting with Busybox
 ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
