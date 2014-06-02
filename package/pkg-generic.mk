@@ -224,10 +224,43 @@ $(BUILD_DIR)/%/.stamp_target_installed:
 	@$(call step_start,install-target)
 	@$(call MESSAGE,"Installing to target")
 	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
-	$(if $(BR2_INIT_SYSTEMD),\
-		$($(PKG)_INSTALL_INIT_SYSTEMD))
-	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
-		$($(PKG)_INSTALL_INIT_SYSV))
+
+ifeq ($(BR2_INIT_SYSTEMD),y)
+ifneq ($$($$(PKG)_INSTALL_INIT_SYSTEMD),)
+	@$(call MESSAGE,"IF")
+	$($(PKG)_INSTALL_INIT_SYSTEMD)
+else
+	@$(call MESSAGE,"ELSE")
+	$(Q)if test -n "$($(PKG)_SYSTEMD_SCRIPTS)" ; then \
+		for s in $($(PKG)_SYSTEMD_SCRIPTS) ; do \
+			$(INSTALL) -D -m 0644 package/$($(PKG)_NAME)/$${s} $(TARGET_DIR)/etc/systemd/system/ ; \
+			mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants ; \
+			ln -fs ../$${s} $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/$${s} ; \
+		done ; \
+	fi
+	$(Q)if test -n "$($(PKG)_SYSTEMD_TMPFILES_SCRIPTS)" ; then \
+		for s in $($(PKG)_SYSTEMD_TMPFILES_SCRIPTS) ; do \
+			mkdir -p $(TARGET_DIR)/usr/lib/tmpfiles.d ; \
+			$(INSTALL) -D -m 0644 package/$($(PKG)_NAME)/$${s} \
+				$(TARGET_DIR)/usr/lib/tmpfiles.d/\
+					$(patsubst %-tmpfiles.conf,%.conf,$${s}) ; \
+		done ; \
+	fi
+endif
+endif
+
+ifeq ($(BR2_INIT_BUSYBOX)$(BR2_INIT_SYSVINIT),y)
+ifdef $($(PKG)_INSTALL_INIT_SYSV)
+	$($(PKG)_INSTALL_INIT_SYSV)
+else
+	$(Q)if test -n "$($(PKG)_SYSVINIT_SCRIPTS)" ; then \
+		for s in $($(PKG)_SYSVINIT_SCRIPTS) ; do \
+			$(INSTALL) -D -m 0755 package/$($(PKG)_NAME)/$${s} $(TARGET_DIR)/etc/init.d/ ; \
+		done ; \
+	fi
+endif
+endif
+
 	+$($(PKG)_INSTALL_TARGET_CMDS)
 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
