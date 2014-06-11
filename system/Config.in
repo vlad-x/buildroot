@@ -124,12 +124,23 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV
 
 config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
 	bool "Dynamic using eudev"
-	depends on !BR2_avr32 # eudev
-	depends on BR2_LARGEFILE
-	depends on BR2_USE_WCHAR
-	depends on !BR2_PREFER_STATIC_LIB
-	depends on BR2_USE_MMU # eudev
+	depends on !BR2_avr32 # eudev (no epoll_create1)
+	depends on BR2_USE_MMU # eudev (fork)
+	depends on BR2_LARGEFILE # eudev (util-linux)
+	depends on BR2_USE_WCHAR # eudev (util-linux)
+	depends on !BR2_PREFER_STATIC_LIB # eudev
 	select BR2_PACKAGE_EUDEV
+	help
+	  Userspace device daemon. This is a standalone version,
+	  independent of systemd. It is a fork maintained by Gentoo.
+
+	  eudev requires a Linux kernel >= 2.6.34: it relies on devtmpfs
+	  and inotify.
+
+	  You can further configure systemd in:
+	    Target packages --> Hardware handling
+
+	  http://github.com/gentoo/eudev/
 
 comment "eudev needs a toolchain w/ largefile, wchar, dynamic library"
 	depends on !BR2_avr32 # eudev
