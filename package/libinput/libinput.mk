@@ -10,7 +10,7 @@ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
 LIBINPUT_LICENSE = MIT
 LIBINPUT_LICENSE_FILES = COPYING
 
-LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev libudev
 LIBINPUT_INSTALL_STAGING = YES
 
 # Tests need fork, so just disable them everywhere.
