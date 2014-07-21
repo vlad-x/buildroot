@@ -1,42 +1,70 @@
+# Note: being prompt-less, and selected in the /dev management choice,
+# it is not needed to have dependencies on this symbol, since the
+# choice entry already have those dependencies.
+# However, it seems more logical to have the dependencies listed here,
+# so it is easier to uderstand why we have those, and duplicate them in
+# the choice entry.
+#
+# Note, although named 'eudev', this package primarily provides libudev,
+# unless the /dev management is selected to be eudev, in which case this
+# package will provide a full udev. That's why the prompt is 'libudev'.
+
 config BR2_PACKAGE_EUDEV
-	bool "eudev"
+	bool "libudev"
+	depends on !BR2_avr32 # no __NR_name_to_handle_at
+	depends on BR2_USE_WCHAR
+	depends on !BR2_PREFER_STATIC_LIB
+	depends on !BR2_PACKAGE_SYSTEMD
+	select BR2_PACKAGE_HAS_LIBUDEV if !BR2_PACKAGE_EUDEV_DAEMON
+	help
+	  eudev is a fork of systemd-udev with the goal of obtaining better
+	  compatibility with existing software.
+
+	  This installs only the libudev library.
+
+	  http://www.gentoo.org/proj/en/eudev/
+
+if BR2_PACKAGE_EUDEV
+
+config BR2_PACKAGE_EUDEV_DAEMON
+	bool
 	depends on !BR2_avr32 # no epoll_create1
-	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
 	depends on BR2_USE_MMU # uses fork()
 	depends on BR2_LARGEFILE # util-linux
 	depends on BR2_USE_WCHAR # util-linux
 	depends on !BR2_PREFER_STATIC_LIB # kmod
+	select BR2_PACKAGE_HAS_LIBUDEV
 	select BR2_PACKAGE_HAS_UDEV
 	select BR2_PACKAGE_UTIL_LINUX
 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
 	select BR2_PACKAGE_KMOD
-	help
-	  Userspace device daemon. This is a standalone version,
-	  independent of systemd. It is a fork maintained by Gentoo.
 
-	  eudev requires a Linux kernel >= 2.6.34: it relies on devtmpfs
-	  and inotify.
+if BR2_PACKAGE_EUDEV_DAEMON
 
-	  http://github.com/gentoo/eudev/
-
-if BR2_PACKAGE_EUDEV
+config BR2_PACKAGE_PROVIDES_LIBUDEV
+	default "eudev"
 
 config BR2_PACKAGE_PROVIDES_UDEV
 	default "eudev"
 
 config BR2_PACKAGE_EUDEV_RULES_GEN
-	bool "enable rules generator"
+	bool "eudev rules generator"
 	help
 	  Enable persistent rules generator
 
-endif
+endif # BR2_PACKAGE_EUDEV_DAEMON
 
-comment "eudev needs eudev /dev management"
-	depends on !BR2_avr32
-	depends on BR2_USE_MMU
-	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+# If the daemon is selected, it means we have a full udev, which is
+# responsible for providing libudev. So only provide libudev if the
+# daemon is not selected.
+config BR2_PACKAGE_PROVIDES_LIBUDEV
+	default "eudev" if !BR2_PACKAGE_EUDEV_DAEMON
 
-comment "eudev needs a toolchain w/ largefile, wchar, dynamic library"
-	depends on !BR2_avr32
-	depends on BR2_USE_MMU
-	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_PREFER_STATIC_LIB
+endif # BR2_PACKAGE_EUDEV
+
+comment "libudev needs a toolchain w/ wchar, dynamic library"
+	depends on !BR2_USE_WCHAR || BR2_PREFER_STATIC_LIB
+	depends on !BR2_PACKAGE_SYSTEMD
+
+comment "libudev provided by systemd"
+	depends on BR2_PACKAGE_SYSTEMD

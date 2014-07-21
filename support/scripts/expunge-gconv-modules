@@ -1,0 +1,28 @@
+#!/bin/bash
+
+gawk '
+$1 == "alias" {
+    aliases[$3] = aliases[$3] " " $2;
+}
+$1 == "module" && $2 != "INTERNAL" {
+    mod2cost[$2] = $5;
+    file2mods[$4] = file2mods[$4] " " $2;
+}
+
+END {
+    first = 1;
+    nb_mods = split( file2mods[file], mods );
+    for( i=1; i<nb_mods; i++ ) {
+        if( ! first ) {
+            printf( "\n" );
+        }
+        first = 0;
+        nb_aliases = split( aliases[mods[i]], mod_aliases );
+        for( j=1; j<=nb_aliases; j++ ) {
+            printf( "alias\t%s\t%s\n", mod_aliases[j], mods[i] );
+        }
+        printf( "module\t%s\t%s\t%s\t%d\n", mods[i], "INTERNAL", file, mod2cost[mods[i]] );
+        printf( "module\t%s\t%s\t%s\t%d\n", "INTERNAL", mods[i], file, mod2cost[mods[i]] );
+    }
+}
+'

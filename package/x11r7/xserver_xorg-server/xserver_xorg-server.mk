@@ -123,8 +123,8 @@ XSERVER_XORG_SERVER_DEPENDENCIES += tslib
 XSERVER_XORG_SERVER_CONF_OPT += --enable-tslib LDFLAGS="-lts"
 endif
 
-ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-XSERVER_XORG_SERVER_DEPENDENCIES += udev
+ifeq ($(BR2_PACKAGE_HAS_LIBUDEV),y)
+XSERVER_XORG_SERVER_DEPENDENCIES += libudev
 XSERVER_XORG_SERVER_CONF_OPT += --enable-config-udev
 # udev kms support depends on libdrm
 ifeq ($(BR2_PACKAGE_LIBDRM),y)
