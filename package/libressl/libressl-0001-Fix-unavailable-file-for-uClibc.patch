@@ -1,0 +1,40 @@
+From aec56aae7650399ae8103c1cff8050c5ea606425 Mon Sep 17 00:00:00 2001
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Tue, 19 Aug 2014 21:58:15 +0200
+Subject: [PATCH] Fix unavailable file for uClibc
+
+This file is not available for uClibc has it does not implement getauxval().
+As specified in this discution:
+https://github.com/libressl-portable/portable/pull/1
+
+This will never be fixed in libressl, patch have been sent for other
+libc which should work.
+
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ crypto/compat/issetugid_linux.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/crypto/compat/issetugid_linux.c b/crypto/compat/issetugid_linux.c
+index 669edce..19b2b57 100644
+--- a/crypto/compat/issetugid_linux.c
++++ b/crypto/compat/issetugid_linux.c
+@@ -4,7 +4,6 @@
+  */
+
+ #include <errno.h>
+-#include <gnu/libc-version.h>
+ #include <string.h>
+ #include <sys/types.h>
+ #include <unistd.h>
+@@ -14,6 +13,7 @@
+  * launched setuid/setgid or with additional capabilities.
+  */
+ #ifdef HAVE_GETAUXVAL
++#include <gnu/libc-version.h>
+ #include <sys/auxv.h>
+ #endif
+
+--
+2.0.1
+

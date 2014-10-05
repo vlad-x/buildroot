@@ -1,0 +1,11 @@
+config BR2_PACKAGE_LIBRESSL
+	bool "libressl"
+	depends on BR2_LARGEFILE
+	depends on BR2_TOOLCHAIN_HAS_THREADS
+	help
+	  LibreSSL is a FREE version of the SSL/TLS protocol forked from OpenSSL
+
+	  http://www.libressl.org/
+
+comment "libressl needs a toolchain w/ largefile, threads"
+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
