@@ -55,8 +55,36 @@ notdomain = $(patsubst $(call domain,$(1),$(2))$(call domainseparator,$(2))%,%,$
 # default domainseparator is /, specify alternative value as first argument
 domainseparator = $(if $(1),$(1),/)
 
-# github(user,package,version): returns site of GitHub repository
-github = https://github.com/$(1)/$(2)/archive/$(3)
+# github helper backends
+github-release = https://github.com/$(1)/$(2)/releases/download/$(3)
+github-snapshot = https://github.com/$(1)/$(2)/archive/
+
+# github helper:
+# $1: user name
+# $2: package name
+# $3: either 'release' or 'snapshot'
+#     'release' to get a maintainer tarball
+#     'snapshot' to get a generated tarball
+# $4: if 'release', the tag corresponding to the release
+#     if 'snapshot', not needed
+#
+# For example, for the bmon pckage:
+#   BMON_VERSION = 3.5
+#   BMON_SITE = $(call github,tgraf,bmon,release,v$(BMON_VERSION))
+# would give this URL:
+#   BMON_SITE = https://github.com/tgraf/bmon/releases/download/v3.5
+#
+# For the lxc package:
+#   LXC_VERSION = lxc-1.0.6
+#   LXC_SITE = $(call github,lxc,lxc,snapshot)
+# would give this URL:
+#   LXC_SITE = https://github.com/lxc/lxc/archive/lxc-1.0.6
+
+github = $(if $(findstring release,$(3)),\
+		 $(call github-release,$(1),$(2),$(4)),\
+		 $(if $(findstring snapshot,$(3)),\
+		 	$(call github-snapshot,$(1),$(2)),\
+		 	$(error GitHub helper only support'release' or 'snapshot')))
 
 # Helper for checking a tarball's checksum
 # If the hash does not match, remove the incorrect file
