@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-LIBENCA_VERSION = 1.15
+LIBENCA_VERSION = 1.16
 LIBENCA_SITE = $(call github,nijel,enca,$(LIBENCA_VERSION))
 LIBENCA_INSTALL_STAGING = YES
 LIBENCA_AUTORECONF = YES
