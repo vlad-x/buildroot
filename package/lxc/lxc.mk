@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-LXC_VERSION = 1.0.4
+LXC_VERSION = 1.0.6
 LXC_SITE = $(call github,lxc,lxc,lxc-$(LXC_VERSION))
 LXC_LICENSE = LGPLv2.1+
 LXC_LICENSE_FILES = COPYING
