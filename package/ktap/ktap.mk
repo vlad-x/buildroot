@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-KTAP_VERSION = v0.4
+KTAP_VERSION = 5b16b61deb6c8a99d71e5167706a5f5566135828
 KTAP_SITE = $(call github,ktap,ktap,$(KTAP_VERSION))
 KTAP_SOURCE = v$(KTAP_VERSION).tar.gz
 KTAP_LICENSE = GPLv2
