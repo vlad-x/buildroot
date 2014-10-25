@@ -4,9 +4,8 @@
 #
 ################################################################################
 
-# This cset is on master. When a Gotham branch is made, we should
-# follow it, as incompatible changes in the plugins API can happen
-# on the master branch.
+# This cset is the HEAD of the xbmc-gotham master. It will need to change when
+# XBMC is updated.
 XBMC_ADDON_XVDR_VERSION = 82b5093ad33847f97a978cb620c9a87d2dbcf7eb
 XBMC_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(XBMC_ADDON_XVDR_VERSION))
 XBMC_ADDON_XVDR_LICENSE = GPLv2+
