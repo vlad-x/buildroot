@@ -1,0 +1,30 @@
+From 159f55fba332a25f059b391699f85640c47feb6d Mon Sep 17 00:00:00 2001
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 25 Oct 2014 20:03:52 +0200
+Subject: [PATCH 1/2] [PATCH] fix json_reformat linking on uClibc
+
+json_reformat calls yajl_gen_* functions, which internally use isnan() /
+isinf(). On Glibc, these are provided by libc, but on uClibc you need to
+link with -lm (like the spec says), so ensure we do so.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ reformatter/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/reformatter/CMakeLists.txt b/reformatter/CMakeLists.txt
+index 52a9bee..e630851 100644
+--- a/reformatter/CMakeLists.txt
++++ b/reformatter/CMakeLists.txt
+@@ -26,7 +26,7 @@ LINK_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/lib)
+ 
+ ADD_EXECUTABLE(json_reformat ${SRCS})
+ 
+-TARGET_LINK_LIBRARIES(json_reformat yajl_s)
++TARGET_LINK_LIBRARIES(json_reformat yajl_s m)
+ 
+ # In some environments, we must explicitly link libm (like qnx,
+ # thanks @shahbag)
+-- 
+2.1.1
+
