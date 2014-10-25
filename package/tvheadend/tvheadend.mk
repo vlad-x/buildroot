@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-TVHEADEND_VERSION = ca742e00a7717787351e1a432ca9b41f93369d60
+TVHEADEND_VERSION = 596b4e0b29937a6123b25940621fe17dccbefbb4
 TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
 TVHEADEND_LICENSE = GPLv3+
 TVHEADEND_LICENSE_FILES = LICENSE.md
