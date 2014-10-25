@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-SUNXI_MALI_VERSION = c2491fe952354ba44538064e534ed7c731cedb1e
+SUNXI_MALI_VERSION = d343311efc8db166d8371b28494f0f27b6a58724
 SUNXI_MALI_SITE = $(call github,linux-sunxi,sunxi-mali,$(SUNXI_MALI_VERSION))
 
 SUNXI_MALI_INSTALL_STAGING = YES
