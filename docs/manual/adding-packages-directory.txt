@@ -411,6 +411,11 @@ the hashes of the downloaded files for the +libfoo+ package.
 The hashes stored in that file are used to validate the integrity of the
 downloaded files.
 
+If +libfoo+ is from GitHub, we can only accept +.hash+ file if the
+package has a release section and the maintainer has uploaded a release
+tarball. Otherwise, the automated generated tarball may change through
+time, rendering a +.hash+ file invalid.
+
 The format of this file is one line for each file for which to check the
 hash, each line being space-separated, with these three fields:
 
