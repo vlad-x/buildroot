@@ -1,0 +1,93 @@
+From 12bdf19986f4639352b0800df79490362d55dc13 Mon Sep 17 00:00:00 2001
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 26 Oct 2014 13:03:30 +0100
+Subject: [PATCH] setup.py: Rework setup.py
+
+This was done to be able to pass a prefix to setup.py to find
+boost_python library.
+This way, you can compile and cross compile it easily.
+
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ setup.py | 57 +++++++++++++++++++++++++--------------------------------
+ 1 file changed, 25 insertions(+), 32 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index cf538d9..59c2ffb 100644
+--- a/setup.py
++++ b/setup.py
+@@ -1,32 +1,32 @@
+ # -*- coding: utf-8 -*-
+ 
+ from setuptools import setup, Extension
++from setuptools.command import build_ext
+ from os.path import join, basename, splitext
+ from glob import glob
++import os
+ 
+-include_dirs = ["/usr/local/include", "/opt/local/include"]
+-library_dirs = ["/usr/lib", "/usr/lib64", "/usr/local/lib", "/usr/local/lib64", "/opt/local/lib"]
+-libraries = ["config++"]
+-
+-# Attempt to find libboost_python.so or some variant by searching through the
+-# library directories.
+-# TODO: is there some API for this?
+-for d in library_dirs:
+-    libs = glob(join(d, "libboost_python.so"))
+-    if not(libs):
+-        libs = glob(join(d, "libboost_python*.so"))
+-    if libs:
+-        libname = basename(libs[0])         # basename
+-        libname = splitext(libname)[0]      # truncate postfix
+-        libname = libname[3:]               # truncate "lib"
+-        libraries.append(libname)
+-        break
+-
+-# If we were unable to find the shared library go ahead in a default. It might
+-# be in an unofficial directory and an environment variable has been set that
+-# will point the compiler to it.
+-if len(libraries) <= 1:
+-    libraries.append('boost_python')
++class _PyLibConfigBuildExt(build_ext.build_ext):
++    user_options = build_ext.build_ext.user_options + \
++            [('boostpython=', 'o', 'Prefix for Boost python installation location')]
++
++    def initialize_options(self):
++        build_ext.build_ext.initialize_options(self)
++
++        self.libraries = ['config++', 'boost_python']
++        self.boostpython = '/usr'
++
++    def finalize_options(self):
++        build_ext.build_ext.finalize_options(self)
++
++        boostpython_include_dir = os.path.join(self.boostpython, 'include')
++        boostpython_library_dir = os.path.join(self.boostpython, 'lib')
++
++        self.include_dirs += [os.path.join(self.boostpython, boostpython_include_dir)]
++        self.library_dirs += [os.path.join(self.boostpython, boostpython_library_dir)]
++
++pylibconfig = Extension(name = 'pylibconfig',
++                        sources = ["src/pylibconfig.cc"])
+ 
+ setup(
+     name='pylibconfig',
+@@ -40,13 +40,6 @@ setup(
+     test_suite="tests",
+     license="bsd",
+     url="https://github.com/cnangel/python-libconfig",
+-    ext_modules=[
+-        Extension(
+-            "pylibconfig",
+-            ["src/pylibconfig.cc"],
+-            include_dirs=include_dirs,
+-            library_dirs=library_dirs,
+-            libraries=libraries
+-        )
+-    ]
++    ext_modules=[pylibconfig],
++    cmdclass = {'build_ext': _PyLibConfigBuildExt}
+ )
+-- 
+2.1.1
+
