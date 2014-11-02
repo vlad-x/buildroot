@@ -6,6 +6,7 @@
 case "$1" in
 	start)
 		echo -n "Starting openntpd: "
+		mkdir -p /var/run/ntp
 		start-stop-daemon -S -x /usr/sbin/ntpd
 		[ $? == 0 ] && echo "OK" || echo "FAIL"
 		;;

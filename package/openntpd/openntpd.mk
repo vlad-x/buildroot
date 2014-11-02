@@ -21,10 +21,14 @@ define OPENNTPD_INSTALL_INIT_SYSTEMD
 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
 	ln -fs ../openntpd.service \
 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/openntpd.service
+
+	mkdir -p $(TARGET_DIR)/usr/lib/tmpfiles.d
+	$(INSTALL) -D -m 644 package/openntpd/openntpd_tmpfiles.conf \
+		$(TARGET_DIR)/usr/lib/tmpfiles.d/openntpd.conf
 endef
 
 define OPENNTPD_USERS
-_ntp -1 _ntp -1 * - - - Network Time Protocol daemon
+_ntp -1 _ntp -1 * /var/run/ntp - - Network Time Protocol daemon
 endef
 
 $(eval $(autotools-package))
