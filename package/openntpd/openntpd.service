@@ -1,0 +1,9 @@
+[Unit]
+Description=OpenNTPD Network Time Protocol daemon
+
+[Service]
+ExecStart=/usr/sbin/ntpd -d
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target.wants

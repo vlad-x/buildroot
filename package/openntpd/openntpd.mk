@@ -15,6 +15,14 @@ define OPENNTPD_INSTALL_INIT_SYSV
 		$(TARGET_DIR)/etc/init.d/S49ntp
 endef
 
+define OPENNTPD_INSTALL_INIT_SYSTEMD
+	$(INSTALL) -D -m 644 package/openntpd/openntpd.service \
+		$(TARGET_DIR)/etc/systemd/system/openntpd.service
+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+	ln -fs ../openntpd.service \
+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/openntpd.service
+endef
+
 define OPENNTPD_USERS
 _ntp -1 _ntp -1 * - - - Network Time Protocol daemon
 endef
