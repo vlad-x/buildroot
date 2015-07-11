@@ -15,13 +15,12 @@ touch /run/nfs/rmtab
 start() {
 	# Start daemons.
 	echo -n "Starting NFS statd: "
-	rpc.statd
+	rpc.statd -F
 	touch /var/lock/subsys/nfslock
 	echo "done"
 
 	echo -n "Starting NFS services: "
 	/usr/sbin/exportfs -r
-	rpc.statd
 	echo "done"
 
 	echo -n "Starting NFS daemon: "
