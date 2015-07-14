@@ -41,7 +41,7 @@ $(2)_SITE		?= $$(call qstrip,$$(BR2_LUAROCKS_MIRROR))
 
 # Since we do not support host-luarocks-package, we know this is
 # a target package, and can just add the required dependencies
-$(2)_DEPENDENCIES	+= host-luarocks luainterpreter
+$(2)_INFRA_EXTRA_DEPENDENCIES += host-luarocks luainterpreter
 
 #
 # Extract step

@@ -47,15 +47,8 @@ $(2)_SOURCE =
 # Fake a version string, so it looks nicer in the build log
 $(2)_VERSION = virtual
 
-# This must be repeated from inner-generic-package, otherwise we get an empty
-# _DEPENDENCIES
-ifeq ($(4),host)
-$(2)_DEPENDENCIES ?= $$(filter-out host-skeleton host-toolchain $(1),\
-	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
-endif
-
 # Add dependency against the provider
-$(2)_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
+$(2)_INFRA_EXTRA_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
 
 # Call the generic package infrastructure to generate the necessary
 # make targets

@@ -39,7 +39,7 @@ PERL_RUN = PERL5LIB= $(HOST_DIR)/usr/bin/perl
 
 define inner-perl-package
 
-$(2)_DEPENDENCIES += host-perl
+$(2)_INFRA_EXTRA_DEPENDENCIES += host-perl
 
 #
 # Configure step. Only define it if not already defined by the package

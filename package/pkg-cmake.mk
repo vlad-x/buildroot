@@ -143,14 +143,7 @@ endef
 endif
 endif
 
-# This must be repeated from inner-generic-package, otherwise we only get
-# host-cmake in _DEPENDENCIES because of the following line
-ifeq ($(4),host)
-$(2)_DEPENDENCIES ?= $$(filter-out host-skeleton host-toolchain $(1),\
-	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
-endif
-
-$(2)_DEPENDENCIES += host-cmake
+$(2)_INFRA_EXTRA_DEPENDENCIES += host-cmake
 
 #
 # Build step. Only define it if not already defined by the package .mk

@@ -138,20 +138,9 @@ else
 $$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils' or 'setuptools'")
 endif
 
-# The below statement intends to calculate the dependencies of host
-# packages by derivating them from the dependencies of the
-# corresponding target package, after adding the 'host-' prefix in
-# front of the dependencies.
-#
-# However it must be repeated from inner-generic-package, as we need
-# to exclude the python, host-python and host-python-setuptools
-# packages, which are added below in the list of dependencies
-# depending on the package characteristics, and shouldn't be derived
-# automatically from the dependencies of the corresponding target
-# package.
-ifeq ($(4),host)
-$(2)_DEPENDENCIES ?= $$(filter-out host-python host-python3 host-python-setuptools host-skeleton host-toolchain $(1),$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
-endif
+# Specifiy the packages that needs to be excluded and are specific to this
+# package infrastructure.
+$(2)_INFRA_EXTRA_DEPENDENCIES = host-python host-python3 host-python-setuptools
 
 # Target packages need both the python interpreter on the target (for
 # runtime) and the python interpreter on the host (for
@@ -168,15 +157,15 @@ endif
 #   - otherwise, we depend on the one requested by *_NEEDS_HOST_PYTHON.
 #
 ifeq ($(4),target)
-$(2)_DEPENDENCIES += $$(if $$(BR2_PACKAGE_PYTHON3),host-python3 python3,host-python python)
+$(2)_INFRA_EXTRA_DEPENDENCIES += $$(if $$(BR2_PACKAGE_PYTHON3),host-python3 python3,host-python python)
 else
 ifeq ($$($(2)_NEEDS_HOST_PYTHON),)
-$(2)_DEPENDENCIES += $$(if $$(BR2_PACKAGE_PYTHON3),host-python3,host-python)
+$(2)_INFRA_EXTRA_DEPENDENCIES += $$(if $$(BR2_PACKAGE_PYTHON3),host-python3,host-python)
 else
 ifeq ($$($(2)_NEEDS_HOST_PYTHON),python2)
-$(2)_DEPENDENCIES += host-python
+$(2)_INFRA_EXTRA_DEPENDENCIES += += host-python
 else ifeq ($$($(2)_NEEDS_HOST_PYTHON),python3)
-$(2)_DEPENDENCIES += host-python3
+$(2)_INFRA_EXTRA_DEPENDENCIES += host-python3
 else
 $$(error Incorrect value '$$($(2)_NEEDS_HOST_PYTHON)' for $(2)_NEEDS_HOST_PYTHON)
 endif
@@ -190,7 +179,7 @@ endif # ($(4),target)
 # depend on itself!).
 ifeq ($$($(2)_SETUP_TYPE),setuptools)
 ifneq ($(2),HOST_PYTHON_SETUPTOOLS)
-$(2)_DEPENDENCIES += host-python-setuptools
+$(2)_INFRA_EXTRA_DEPENDENCIES += host-python-setuptools
 endif
 endif
 

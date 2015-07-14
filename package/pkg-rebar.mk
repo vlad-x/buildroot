@@ -149,7 +149,7 @@ endif
 ifeq ($(4),target)
 
 # Target packages need the erlang interpreter on the target
-$(2)_DEPENDENCIES += erlang
+$(2)_INFRA_EXTRA_DEPENDENCIES += erlang
 
 # Used only if the package uses autotools underneath; otherwise, ignored
 $(2)_CONF_ENV += $$(REBAR_TARGET_DEPS_ENV)
@@ -187,21 +187,19 @@ endif
 else # !target
 
 ifeq ($$($(2)_USE_AUTOCONF),YES)
-# This must be repeated from inner-autotools-package, otherwise we get
-# an empty _DEPENDENCIES if _AUTORECONF is YES or _USE_BUNDLED_REBAR
-# is NO.  Also filter the result of _AUTORECONF and _GETTEXTIZE away
-# from the non-host rule
-$(2)_DEPENDENCIES ?= $$(filter-out host-automake host-autoconf host-libtool \
-				host-gettext host-skeleton host-toolchain host-erlang-rebar $(1),\
-    $$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
+# Specifiy the packages that needs to be excluded and are specific to this
+# package infrastructure.
+# if _AUTORECONF is YES or _USE_BUNDLED_REBAR is NO.  Also filter the result of
+#_AUTORECONF and _GETTEXTIZE away from the non-host rule
+$(2)_INFRA_EXTRA_DEPENDENCIES = host-automake host-autoconf host-libtool \
+	host-gettext host-erlang-rebar
 else
 # Same deal, if _USE_BUNDLED_REBAR is NO.
-$(2)_DEPENDENCIES ?= $$(filter-out  host-skeleton host-toolchain host-erlang-rebar $(1),\
-	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
+$(2)_INFRA_EXTRA_DEPENDENCIES = host-erlang-rebar
 endif
 
 # Host packages need the erlang interpreter on the host
-$(2)_DEPENDENCIES += host-erlang
+$(2)_INFRA_EXTRA_DEPENDENCIES += host-erlang
 
 # Used only if the package uses autotools underneath; otherwise, ignored
 $(2)_CONF_ENV += $$(REBAR_HOST_DEPS_ENV)
@@ -236,7 +234,7 @@ ifeq ($$($(2)_USE_BUNDLED_REBAR),YES)
 $(2)_REBAR = ./rebar
 else
 $(2)_REBAR = rebar
-$(2)_DEPENDENCIES += host-erlang-rebar
+$(2)_INFRA_EXTRA_DEPENDENCIES += host-erlang-rebar
 endif
 
 # The package sub-infra to use
