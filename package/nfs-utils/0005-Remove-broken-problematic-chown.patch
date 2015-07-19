@@ -1,0 +1,25 @@
+From 6602a2dbee18d8a6bc568a6486adbe9c83f05736 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Aur=C3=A9lien=20Chabot?= <aurelien@chabot.fr>
+Date: Tue, 17 Feb 2015 00:55:59 +0100
+Subject: [PATCH] Remove broken problematic chown
+
+Signed-off-by: Aurélien Chabot <aurelien@chabot.fr>
+---
+ Makefile.am | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 4a2edc6..59e5328 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -28,8 +28,6 @@ install-data-hook:
+	touch $(DESTDIR)$(statedir)/rmtab; chmod 644 $(DESTDIR)$(statedir)/rmtab
+	mkdir -p $(DESTDIR)$(statdpath)/sm $(DESTDIR)$(statdpath)/sm.bak
+	touch $(DESTDIR)$(statdpath)/state
+-	chmod go-rwx $(DESTDIR)$(statdpath)/sm $(DESTDIR)$(statdpath)/sm.bak $(DESTDIR)$(statdpath)/state
+-	-chown $(statduser) $(DESTDIR)$(statdpath)/sm $(DESTDIR)$(statdpath)/sm.bak $(DESTDIR)$(statdpath)/state
+
+ uninstall-hook:
+	rm $(DESTDIR)$(statedir)/xtab
+--
+2.3.0

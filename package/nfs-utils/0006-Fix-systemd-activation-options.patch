@@ -1,0 +1,24 @@
+From c61c2075588f9e47509d2607613da8cef5b2491c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Aur=C3=A9lien=20Chabot?= <aurelien@chabot.fr>
+Date: Wed, 18 Feb 2015 22:33:45 +0100
+Subject: [PATCH] Fix systemd activation options
+
+Signed-off-by: Aurélien Chabot <aurelien@chabot.fr>
+---
+ configure.ac | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 8e427e3..e61430f 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -60,7 +60,6 @@ AC_ARG_WITH(systemd,
+	[AC_HELP_STRING([--with-systemd@<:@=unit-dir-path@:>@],
+			[install systemd unit files @<:@Default: no, and path defaults to /usr/lib/systemd/system if not given@:>@])],
+	test "$withval" = "no" && use_systemd=0 || unitdir=$withval use_systemd=1
+-	use_systemd=0
+	)
+	AM_CONDITIONAL(INSTALL_SYSTEMD, [test "$use_systemd" = 1])
+	AC_SUBST(unitdir)
+--
+2.3.0
