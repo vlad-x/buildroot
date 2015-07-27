@@ -142,14 +142,14 @@ endif
 
 ifeq ($(BR2_INIT_BUSYBOX)$(BR2_INIT_SYSV),y)
 ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
-# Find commented line, if any, and remove leading '#'s
+# Find 'ro,' (avoid 'root') in the first line and change it to 'rw,'
 define SKELETON_SYSTEM_REMOUNT_RW
-	$(SED) '/^#.*-o remount,rw \/$$/s~^#\+~~' $(TARGET_DIR)/etc/inittab
+	$(SED) 0,/ro\,/{s/ro\,/rw\,/} $(TARGET_DIR)/etc/fstab
 endef
 else
-# Find uncommented line, if any, and add a leading '#'
+# Find rw on the first line and change it to ro
 define SKELETON_SYSTEM_REMOUNT_RW
-	$(SED) '/^[^#].*-o remount,rw \/$$/s~^~#~' $(TARGET_DIR)/etc/inittab
+	$(SED) 0,/rw/{s/rw/ro/} $(TARGET_DIR)/etc/fstab
 endef
 endif
 TARGET_FINALIZE_HOOKS += SKELETON_SYSTEM_REMOUNT_RW
