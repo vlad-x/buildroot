@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-SYSTEMD_VERSION = 229
+SYSTEMD_VERSION = 230
 SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
 SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
 SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
@@ -138,12 +138,6 @@ ifeq ($(BR2_PACKAGE_SYSTEMD_VCONSOLE),y)
 SYSTEMD_CONF_OPTS += --enable-vconsole
 else
 SYSTEMD_CONF_OPTS += --disable-vconsole
-endif
-
-ifeq ($(BR2_PACKAGE_SYSTEMD_BOOTCHART),y)
-SYSTEMD_CONF_OPTS += --enable-bootchart
-else
-SYSTEMD_CONF_OPTS += --disable-bootchart
 endif
 
 ifeq ($(BR2_PACKAGE_SYSTEMD_QUOTACHECK),y)
